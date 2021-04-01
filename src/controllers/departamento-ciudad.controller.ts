@@ -3,7 +3,7 @@ import {
   CountSchema,
   Filter,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
   del,
@@ -13,11 +13,10 @@ import {
   param,
   patch,
   post,
-  requestBody,
+  requestBody
 } from '@loopback/rest';
 import {
-  Departamento,
-  Ciudad,
+  Ciudad, Departamento
 } from '../models';
 import {DepartamentoRepository} from '../repositories';
 
@@ -26,7 +25,7 @@ export class DepartamentoCiudadController {
     @repository(DepartamentoRepository) protected departamentoRepository: DepartamentoRepository,
   ) { }
 
-  @get('/departamentos/{id}/ciudads', {
+  @get('/departamentos/{id}/ciudades', {
     responses: {
       '200': {
         description: 'Array of Departamento has many Ciudad',
@@ -45,7 +44,7 @@ export class DepartamentoCiudadController {
     return this.departamentoRepository.ciudades(id).find(filter);
   }
 
-  @post('/departamentos/{id}/ciudads', {
+  @post('/departamentos/{id}/ciudades', {
     responses: {
       '200': {
         description: 'Departamento model instance',
@@ -70,7 +69,7 @@ export class DepartamentoCiudadController {
     return this.departamentoRepository.ciudades(id).create(ciudad);
   }
 
-  @patch('/departamentos/{id}/ciudads', {
+  @patch('/departamentos/{id}/ciudades', {
     responses: {
       '200': {
         description: 'Departamento.Ciudad PATCH success count',
@@ -93,7 +92,7 @@ export class DepartamentoCiudadController {
     return this.departamentoRepository.ciudades(id).patch(ciudad, where);
   }
 
-  @del('/departamentos/{id}/ciudads', {
+  @del('/departamentos/{id}/ciudades', {
     responses: {
       '200': {
         description: 'Departamento.Ciudad DELETE success count',

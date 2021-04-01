@@ -12,3 +12,5 @@ export * from './profesion-persona-trabaja.controller';
 export * from './solicitud-empresa-persona-persona.controller';
 export * from './trabaja-profesion-persona.controller';
 export * from './departamento-ciudad.controller';
+export * from './usuario-tipo-usuario.controller';
+export * from './tipo-usuario-usuario.controller';
