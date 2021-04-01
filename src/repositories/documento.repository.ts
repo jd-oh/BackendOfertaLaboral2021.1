@@ -9,7 +9,7 @@ export class DocumentoRepository extends DefaultCrudRepository<
   DocumentoRelations
 > {
   constructor(
-    @inject('datasources.Mysqlds') dataSource: MysqldsDataSource,
+    @inject('datasources.mysqlds') dataSource: MysqldsDataSource,
   ) {
     super(Documento, dataSource);
   }

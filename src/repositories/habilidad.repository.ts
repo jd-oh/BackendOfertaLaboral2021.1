@@ -9,7 +9,7 @@ export class HabilidadRepository extends DefaultCrudRepository<
   HabilidadRelations
 > {
   constructor(
-    @inject('datasources.Mysqlds') dataSource: MysqldsDataSource,
+    @inject('datasources.mysqlds') dataSource: MysqldsDataSource,
   ) {
     super(Habilidad, dataSource);
   }

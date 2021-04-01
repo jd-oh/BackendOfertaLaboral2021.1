@@ -13,7 +13,7 @@ export class DepartamentoRepository extends DefaultCrudRepository<
   public readonly ciudades: HasManyRepositoryFactory<Ciudad, typeof Departamento.prototype.id>;
 
   constructor(
-    @inject('datasources.Mysqlds') dataSource: MysqldsDataSource, @repository.getter('CiudadRepository') protected ciudadRepositoryGetter: Getter<CiudadRepository>,
+    @inject('datasources.mysqlds') dataSource: MysqldsDataSource, @repository.getter('CiudadRepository') protected ciudadRepositoryGetter: Getter<CiudadRepository>,
   ) {
     super(Departamento, dataSource);
     this.ciudades = this.createHasManyRepositoryFactoryFor('ciudades', ciudadRepositoryGetter,);

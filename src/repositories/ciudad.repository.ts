@@ -1,5 +1,5 @@
-import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, BelongsToAccessor, HasManyRepositoryFactory} from '@loopback/repository';
+import {Getter, inject} from '@loopback/core';
+import {BelongsToAccessor, DefaultCrudRepository, HasManyRepositoryFactory, repository} from '@loopback/repository';
 import {MysqldsDataSource} from '../datasources';
 import {Ciudad, CiudadRelations, Departamento, Persona} from '../models';
 import {DepartamentoRepository} from './departamento.repository';
@@ -16,7 +16,7 @@ export class CiudadRepository extends DefaultCrudRepository<
   public readonly personas: HasManyRepositoryFactory<Persona, typeof Ciudad.prototype.id>;
 
   constructor(
-    @inject('datasources.Mysqlds') dataSource: MysqldsDataSource, @repository.getter('DepartamentoRepository') protected departamentoRepositoryGetter: Getter<DepartamentoRepository>, @repository.getter('PersonaRepository') protected personaRepositoryGetter: Getter<PersonaRepository>,
+    @inject('datasources.mysqlds') dataSource: MysqldsDataSource, @repository.getter('DepartamentoRepository') protected departamentoRepositoryGetter: Getter<DepartamentoRepository>, @repository.getter('PersonaRepository') protected personaRepositoryGetter: Getter<PersonaRepository>,
   ) {
     super(Ciudad, dataSource);
     this.personas = this.createHasManyRepositoryFactoryFor('personas', personaRepositoryGetter,);

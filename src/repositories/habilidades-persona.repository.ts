@@ -9,7 +9,7 @@ export class HabilidadesPersonaRepository extends DefaultCrudRepository<
   HabilidadesPersonaRelations
 > {
   constructor(
-    @inject('datasources.Mysqlds') dataSource: MysqldsDataSource,
+    @inject('datasources.mysqlds') dataSource: MysqldsDataSource,
   ) {
     super(HabilidadesPersona, dataSource);
   }

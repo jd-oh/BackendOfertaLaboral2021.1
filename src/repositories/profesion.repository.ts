@@ -13,7 +13,7 @@ export class ProfesionRepository extends DefaultCrudRepository<
 
 
   constructor(
-    @inject('datasources.Mysqlds') dataSource: MysqldsDataSource, @repository.getter('ProfesionPersonaRepository') protected profesionPersonaRepositoryGetter: Getter<ProfesionPersonaRepository>,
+    @inject('datasources.mysqlds') dataSource: MysqldsDataSource, @repository.getter('ProfesionPersonaRepository') protected profesionPersonaRepositoryGetter: Getter<ProfesionPersonaRepository>,
   ) {
     super(Profesion, dataSource);
 
