@@ -21,6 +21,10 @@ export class Documento extends Entity {
   })
   archivo: string;
 
+  @property({
+    type: 'number',
+  })
+  personaId?: number;
 
   constructor(data?: Partial<Documento>) {
     super(data);

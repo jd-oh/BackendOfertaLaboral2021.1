@@ -2,12 +2,12 @@ import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
 
 const config = {
-  name: 'Mysqlds',
+  name: 'mysqlds',
   connector: 'mysql',
   url: '',
-  host: '27017',
+  host: 'localhost',
   port: 3000,
-  user: '',
+  user: 'root',
   password: '',
   database: 'OfertaLaboralBD'
 };
@@ -19,11 +19,11 @@ const config = {
 @lifeCycleObserver('datasource')
 export class MysqldsDataSource extends juggler.DataSource
   implements LifeCycleObserver {
-  static dataSourceName = 'Mysqlds';
+  static dataSourceName = 'mysqlds';
   static readonly defaultConfig = config;
 
   constructor(
-    @inject('datasources.config.Mysqlds', {optional: true})
+    @inject('datasources.config.mysqlds', {optional: true})
     dsConfig: object = config,
   ) {
     super(dsConfig);

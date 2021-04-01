@@ -1,6 +1,6 @@
 import {inject} from '@loopback/core';
 import {DefaultCrudRepository} from '@loopback/repository';
-import {MysqldsDataSource} from '../datasources';
+import {MongodbdsDataSource} from '../datasources';
 import {Usuario, UsuarioRelations} from '../models';
 
 export class UsuarioRepository extends DefaultCrudRepository<
@@ -9,7 +9,7 @@ export class UsuarioRepository extends DefaultCrudRepository<
   UsuarioRelations
 > {
   constructor(
-    @inject('datasources.Mysqlds') dataSource: MysqldsDataSource,
+    @inject('datasources.mongodbds') dataSource: MongodbdsDataSource,
   ) {
     super(Usuario, dataSource);
   }
