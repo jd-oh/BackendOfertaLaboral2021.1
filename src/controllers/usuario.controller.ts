@@ -1,30 +1,43 @@
+import {service} from '@loopback/core';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
+  del, get,
+  getModelSchemaRef, HttpErrors, param,
+
+
+  patch, post,
+
+
+
+
   put,
-  del,
+
   requestBody,
-  response,
+  response
 } from '@loopback/rest';
-import {Usuario} from '../models';
+import {Keys as llaves} from '../config/keys';
+import {Credenciales, Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
+import {FuncionesGeneralesService, NotificacionesService, SesionService} from '../services';
 
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
-    public usuarioRepository : UsuarioRepository,
-  ) {}
+    public usuarioRepository: UsuarioRepository,
+    @service(FuncionesGeneralesService)
+    public servicioFunciones: FuncionesGeneralesService,
+    @service(NotificacionesService)
+    public servicioNotificaciones: NotificacionesService,
+    @service(SesionService)
+    public servicioSesion: SesionService
+  ) { }
 
   @post('/usuarios')
   @response(200, {
@@ -37,15 +50,74 @@ export class UsuarioController {
         'application/json': {
           schema: getModelSchemaRef(Usuario, {
             title: 'NewUsuario',
-            exclude: ['id'],
+            exclude: ['id', 'clave'],
           }),
         },
       },
     })
     usuario: Omit<Usuario, 'id'>,
   ): Promise<Usuario> {
-    return this.usuarioRepository.create(usuario);
+    let claveAleatoria = this.servicioFunciones.GenerarClaveAleatoria();
+    console.log(claveAleatoria)
+
+    let claveCifrada = this.servicioFunciones.CifrarTexto(claveAleatoria);
+    console.log(claveCifrada);
+
+
+    usuario.clave = claveCifrada;
+    let usuarioCreado = await this.usuarioRepository.create(usuario);
+
+    // Notificación vía e-mail
+    if (usuarioCreado) {
+      let contenido = `Hola, buen día. <br /> Usted se ha registrado en la plataforma de Oferta Laboral. Sus credenciales de acceso son: <br />
+        <ul>
+          <li>Usuario: ${usuarioCreado.nombre_usuario}</li>
+          <li>Contraseña: ${claveAleatoria}</li>
+        </ul>
+
+      Gracias por confiar en nuestra plataforma de Oferta Laboral.
+      `;
+
+      this.servicioNotificaciones.EnviarCorreoElectronico(usuarioCreado.nombre_usuario, llaves.asuntoNuevoUsuario, contenido)
+
+    }
+
+
+    return usuarioCreado;
   }
+
+  @post('/identificar-usuario')
+  async validar(
+    @requestBody(
+      {
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(Credenciales)
+          }
+        }
+      }
+    )
+    credenciales: Credenciales
+  ): Promise<object> {
+    let usuario = await this.usuarioRepository.findOne({where: {nombre_usuario: credenciales.nombre_usuario, clave: credenciales.clave}});
+    if (usuario) {
+      // Generar un token
+      let token = this.servicioSesion.GenerarToken(usuario);
+      return {
+        user: {
+          username: usuario.nombre_usuario,
+          role: usuario.tipoUsuarioId
+        },
+        tk: token
+      };
+    } else {
+      throw new HttpErrors[401]("Las credenciales no son correctas.")
+    }
+
+  }
+
+
+
 
   @get('/usuarios/count')
   @response(200, {
