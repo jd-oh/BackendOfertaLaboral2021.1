@@ -14,3 +14,4 @@ export * from './trabaja-profesion-persona.controller';
 export * from './departamento-ciudad.controller';
 export * from './usuario-tipo-usuario.controller';
 export * from './tipo-usuario-usuario.controller';
+export * from './persona-profesion.controller';

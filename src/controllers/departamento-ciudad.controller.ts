@@ -25,7 +25,7 @@ export class DepartamentoCiudadController {
     @repository(DepartamentoRepository) protected departamentoRepository: DepartamentoRepository,
   ) { }
 
-  @get('/departamentos/{id}/ciudades', {
+  @get('/departamentos/{id}/ciudads', {
     responses: {
       '200': {
         description: 'Array of Departamento has many Ciudad',
@@ -44,7 +44,7 @@ export class DepartamentoCiudadController {
     return this.departamentoRepository.ciudades(id).find(filter);
   }
 
-  @post('/departamentos/{id}/ciudades', {
+  @post('/departamentos/{id}/ciudads', {
     responses: {
       '200': {
         description: 'Departamento model instance',
@@ -69,7 +69,7 @@ export class DepartamentoCiudadController {
     return this.departamentoRepository.ciudades(id).create(ciudad);
   }
 
-  @patch('/departamentos/{id}/ciudades', {
+  @patch('/departamentos/{id}/ciudads', {
     responses: {
       '200': {
         description: 'Departamento.Ciudad PATCH success count',
@@ -92,7 +92,7 @@ export class DepartamentoCiudadController {
     return this.departamentoRepository.ciudades(id).patch(ciudad, where);
   }
 
-  @del('/departamentos/{id}/ciudades', {
+  @del('/departamentos/{id}/ciudads', {
     responses: {
       '200': {
         description: 'Departamento.Ciudad DELETE success count',

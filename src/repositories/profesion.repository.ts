@@ -1,8 +1,7 @@
-import {Getter, inject} from '@loopback/core';
-import {DefaultCrudRepository, repository} from '@loopback/repository';
+import {inject} from '@loopback/core';
+import {DefaultCrudRepository} from '@loopback/repository';
 import {MysqldsDataSource} from '../datasources';
 import {Profesion, ProfesionRelations} from '../models';
-import {ProfesionPersonaRepository} from './profesion-persona.repository';
 
 export class ProfesionRepository extends DefaultCrudRepository<
   Profesion,
@@ -13,7 +12,7 @@ export class ProfesionRepository extends DefaultCrudRepository<
 
 
   constructor(
-    @inject('datasources.mysqlds') dataSource: MysqldsDataSource, @repository.getter('ProfesionPersonaRepository') protected profesionPersonaRepositoryGetter: Getter<ProfesionPersonaRepository>,
+    @inject('datasources.mysqlds') dataSource: MysqldsDataSource,
   ) {
     super(Profesion, dataSource);
 

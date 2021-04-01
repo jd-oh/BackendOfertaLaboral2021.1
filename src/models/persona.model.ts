@@ -4,10 +4,32 @@ import {Documento} from './documento.model';
 import {Estado} from './estado.model';
 import {Habilidad} from './habilidad.model';
 import {HabilidadesPersona} from './habilidades-persona.model';
+import {ProfesionPersona} from './profesion-persona.model';
+import {Profesion} from './profesion.model';
 import {SolicitudEmpresaPersona} from './solicitud-empresa-persona.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_ciudad_id: {
+        name: 'fk_ciudad_id',
+        entity: 'Ciudad',
+        entityKey: 'id',
+        foreignKey: 'ciudadId',
+      },
+
+      fk_estado_id: {
+        name: 'fk_estado_id',
+        entity: 'Estado',
+        entityKey: 'id',
+        foreignKey: 'estadoId',
+      }
+    },
+  },
+}
+)
 export class Persona extends Entity {
+
   @property({
     type: 'number',
     id: true,
@@ -81,7 +103,8 @@ export class Persona extends Entity {
   @belongsTo(() => Ciudad)
   ciudadId: number;
 
-
+  @hasMany(() => Profesion, {through: {model: () => ProfesionPersona}})
+  profesiones: Profesion[];
 
   constructor(data?: Partial<Persona>) {
     super(data);
