@@ -12,7 +12,7 @@ import {Persona} from './persona.model';
       },
 
       fk_persona_id: {
-        name: 'fk_persona_emp_per_id',
+        name: 'fk_persona_solicitud_id',
         entity: 'Persona',
         entityKey: 'id',
         foreignKey: 'personaId',
