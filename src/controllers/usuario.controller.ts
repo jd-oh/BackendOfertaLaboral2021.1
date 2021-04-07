@@ -23,7 +23,7 @@ import {
   response
 } from '@loopback/rest';
 import {Keys as llaves} from '../config/keys';
-import {Credenciales, Usuario} from '../models';
+import {Credenciales, ResetearClave, Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
 import {FuncionesGeneralesService, NotificacionesService, SesionService} from '../services';
 
@@ -84,6 +84,55 @@ export class UsuarioController {
 
 
     return usuarioCreado;
+  }
+
+  @post('/reset-password')
+  @response(200, {
+    content: {'application/json': {schema: getModelSchemaRef(Usuario)}},
+  })
+  async resetPassword(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(ResetearClave),
+        },
+      },
+    })
+    ResetearClave: ResetearClave,
+  ): Promise<Object> {
+
+    let usuario = await this.usuarioRepository.findOne({where: {nombre_usuario: ResetearClave.correo}})
+    if (!usuario) {
+      throw new HttpErrors[401]("Este usuario no existe")
+    }
+    let claveAleatoria = this.servicioFunciones.GenerarClaveAleatoria();
+    console.log(claveAleatoria)
+
+    let claveCifrada = this.servicioFunciones.CifrarTexto(claveAleatoria);
+    console.log(claveCifrada);
+
+
+    usuario.clave = claveCifrada;
+    await this.usuarioRepository.update(usuario);
+
+    // Notificación SMS para resetear contraseña
+
+    let contenido = `
+    Hola, buen día.
+    Usted ha solicitado una nueva clave en la plataforma de Oferta Laboral. Sus datos de acceso son:
+
+    Usuario: ${usuario.nombre_usuario}
+    Contraseña: ${claveAleatoria}
+
+
+    Gracias por confiar en nuestra plataforma de Oferta Laboral.
+      `;
+
+    this.servicioNotificaciones.EnviarNotificacionPorSMS(usuario.telefono, contenido)
+
+    return {
+      envio: "OK"
+    };
   }
 
   @post('/identificar-usuario')

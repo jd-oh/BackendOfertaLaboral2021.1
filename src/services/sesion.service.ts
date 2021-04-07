@@ -30,7 +30,6 @@ export class SesionService {
       return decoded;
     } catch {
       return null;
-
     }
   }
 
